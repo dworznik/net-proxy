@@ -13,6 +13,6 @@ To run bcoin app:
 webpack-dev-server
 ```
 
-URL: https://localhost:8080/
+URL: http://localhost:8080/
 
 
