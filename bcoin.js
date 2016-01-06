@@ -4,7 +4,7 @@ var leveljs = require('level-js');
 var levelup = require('levelup');
 
 net.setProxy({
-    hostname: 'localhost',
+    hostname: window.location.hostname,
     port: 3000
 });
 
