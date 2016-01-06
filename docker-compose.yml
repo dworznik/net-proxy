@@ -1,0 +1,44 @@
+base:
+  image: node:5.3.0
+  working_dir: /net-proxy
+  environment:
+    NPM_CONFIG_REGISTRY: http://npmlazy
+    NODE_ENV: "development"
+    PATH: /usr/local/lib/node_modules/.bin:/node_modules/.bin:/node_modules:$PATH
+webpack:
+  extends:
+    service: base
+  command: webpack-dev-server --host 0.0.0.0 --watch
+  volumes_from:
+    - cache
+  ports:
+    - "8080:8080"
+  links:
+    - proxy
+proxy:
+  extends:
+    service: base
+  command: node proxy.js
+  volumes_from:
+    - cache
+  expose:
+    - "3000"
+  ports:
+    - "3000:3000"
+shell:
+  extends:
+    service: base
+  entrypoint: /bin/bash
+  command: ""
+  volumes_from:
+    - cache
+  links:
+    - npmlazy
+npmlazy:
+  image: langrisha/npm-lazy
+  command: --show-config --port=80 --external-url=http://npmlazy
+cache:
+  image: busybox
+  volumes:
+    - ./:/net-proxy
+    - /node_modules
