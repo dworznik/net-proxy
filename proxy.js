@@ -13,7 +13,11 @@ app.use(cors({
 app.use(netApi());
 
 
-// Start the server 
+// Start the server
 var server = app.listen(3000, function() {
     console.log('Server listening on port ' + server.address().port);
 });
+
+process.on('uncaughtException', function (err) {
+  console.error('Uncaught exception: ', err.stack);
+})
