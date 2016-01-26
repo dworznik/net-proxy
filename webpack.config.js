@@ -1,9 +1,14 @@
+var webpack = require('webpack');
 module.exports = {
-    entry: "./bcoin.js",
+    entry: "./wallet.js",
     output: {
         path: __dirname,
         filename: "bundle.js"
     },
+    plugins: [
+        new webpack.DefinePlugin({
+            PRIV_KEY: JSON.stringify(process.env.PRIV_KEY)
+        })],
     module: {
         loaders: [
             {

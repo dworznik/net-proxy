@@ -9,16 +9,19 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bcoin": "^0.15.0",
+    "bcoin": "git://github.com/dworznik/bcoin.git#ve-testing-1",
     "cors": "^2.7.1",
     "express": "^4.13.3",
     "level-js": "^2.2.3",
+    "leveldown": "^1.4.3",
     "levelup": "^1.3.1",
-    "net-browserify": "^0.2.2"
+    "net-browserify": "^0.2.2",
+    "rcl": "^0.3.4"
   },
   "devDependencies": {
     "babel-core": "^6.3.26",
     "babel-loader": "^6.2.0",
-    "json-loader": "^0.5.4"
+    "json-loader": "^0.5.4",
+    "webpack": "^1.12.12"
   }
 }

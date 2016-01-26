@@ -4,5 +4,18 @@
     </head>
     <body>
         <script type="text/javascript" src="bundle.js" charset="utf-8"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+        Action:
+        <form>
+        <button type="button" onclick="(function() { $('#content').append('<div>test</div>');})()">No</button>
+                <button type="button" onclick="window.wat()">Cancel</button>
+
+        </form>
+                <div id="content"></div>
+
+	<script type="text/javascript">
+		window.go($('#content'));
+	</script>
     </body>
 </html>
