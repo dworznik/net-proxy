@@ -5,6 +5,17 @@ var cors = require('cors');
 // Create our app 
 var app = express();
 
+app.use(function(req, res, next) {
+    var oldSetHeader = res.setHeader;
+    res.setHeader = function() {
+        if (!res._headerSent) {
+            oldSetHeader.apply(res, arguments);
+        } else {
+        	console.log('Headers already sent.');
+        }
+    };
+    next();
+});
 app.use(cors({
     credentials: true,
     origin: 'http://localhost:8080',
