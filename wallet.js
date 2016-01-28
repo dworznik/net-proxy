@@ -87,6 +87,7 @@ pool.on('chain-progress', function(progress) {
 pool.on('tx', function(tx) {
     console.info('Transaction: %s, block: %s', tx.hash('hex'), tx.block);
     console.info('Transaction: %j', tx);
+    wallet.addTX(tx);
     container.append('<div>Transaction: ' + tx.hash('hex') + ' block: ' + tx.block + '</div>');
 });
 
