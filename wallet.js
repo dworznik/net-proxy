@@ -78,9 +78,9 @@ pool.on('debug', function(co) {
     console.log.apply(console, arguments);
 });
 
-pool.on('chain-progress', function(progress) {
-    console.info('Progress: ' + progress);
-    progress.replaceWith(progress);
+pool.on('chain-progress', function(pr) {
+    console.info('Progress: ' + pr);
+    progress.html(pr);
 });
 
 pool.on('tx', function(tx) {
