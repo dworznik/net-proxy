@@ -136,3 +136,6 @@ window.wat = function() { console.info('WAT')};
 window.go = function(el) {
 	container = el;
 }
+window.balance = function() {
+	container.append('Balance: ' + wallet.balance());
+}
