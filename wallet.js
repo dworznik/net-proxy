@@ -33,16 +33,14 @@ crypto.createHash = function createHash(alg) {
 };
 
 net.setProxy({
-    hostname: 'localhost',
-    port: 3000
+    hostname: 'bcoin.herokuapp.com',
+    port: 80
 });
 
 var storage = levelup('dupa', {
     db: leveljs,
     valueEncoding: 'json'
 });
-
-var log = net.connect(8888, 'localhost');
 
 var pool = bcoin.pool({
     size: 64,
