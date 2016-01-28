@@ -1,14 +1,13 @@
 var express = require('express');
 var path = require('path');
 var webpack = require('webpack');
-
 var netApi = require('net-browserify');
 var cors = require('cors');
 
-// Create proxy
-var proxy = express();
+var app = express();
+var static_path = path.join(__dirname);
 
-proxy.use(function(req, res, next) {
+app.use(function(req, res, next) {
     var oldSetHeader = res.setHeader;
     res.setHeader = function() {
         if (!res._headerSent) {
@@ -19,22 +18,13 @@ proxy.use(function(req, res, next) {
     };
     next();
 });
-proxy.use(cors({
+app.use(cors({
     credentials: true,
     origin: 'http://localhost:8080',
     methods: ['GET', 'POST', 'PUT', 'CONNECT', 'HEAD', 'OPTIONS']
 }));
-proxy.use(netApi());
+app.use(netApi());
 
-
-// Start the server 
-var server = proxy.listen(3000, function() {
-    console.log('Server listening on port ' + server.address().port);
-});
-
-var static_path = path.join(__dirname);
-
-var app = express();
 app.use(express.static(static_path))
   .get('/', function (req, res) {
     res.sendFile('index.html', {
