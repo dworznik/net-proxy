@@ -80,6 +80,7 @@ pool.on('debug', function(co) {
 
 pool.on('chain-progress', function(progress) {
     console.info('Progress: ' + progress);
+    progress.replaceWith(progress);
 });
 
 pool.on('tx', function(tx) {
@@ -131,10 +132,12 @@ console.info('Wallet address: %s', wallet.getAddress());
 pool.startSync();
 
 var container = null;
+var progress = null;
 
 window.wat = function() { console.info('WAT')};
-window.go = function(el) {
+window.go = function(el, prog) {
 	container = el;
+	progress = prog;
 }
 window.balance = function() {
 	container.append('Balance: ' + wallet.balance());
