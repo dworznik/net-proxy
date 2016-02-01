@@ -25,11 +25,11 @@ addTimestamp(console);
 var crypto = require('crypto');
 var sourceCreateHash = crypto.createHash;
 crypto.createHash = function createHash(alg) {
-    if (alg === 'ripemd160') {
-        return sourceCreateHash('rmd160');
-    }
+if (alg === 'ripemd160') {
+    return sourceCreateHash('rmd160');
+}
 
-    return sourceCreateHash(alg);
+return sourceCreateHash(alg);
 };
 
 net.setProxy({
@@ -37,7 +37,12 @@ net.setProxy({
     port: 80
 });
 
-var storage = levelup('dupa', {
+var chainStorage = levelup('bcoin-chain', {
+    db: leveljs,
+    valueEncoding: 'json'
+});
+
+var walletStorage = levelup('bcoin-wallet', {
     db: leveljs,
     valueEncoding: 'json'
 });
@@ -45,8 +50,9 @@ var storage = levelup('dupa', {
 var pool = bcoin.pool({
     size: 64,
     createSocket: function(port, host) {
-    	return 	net.connect(port, host);
-    }
+        return net.connect(port, host);
+    },
+    storage: chainStorage
 });
 
 
@@ -84,11 +90,16 @@ pool.on('chain-progress', function(pr) {
 });
 
 pool.on('tx', function(tx) {
-    console.info('Transaction: %s, block: %s', tx.hash('hex'), tx.block);
-    console.info('Transaction: %j', tx);
+    console.debug('Transaction: %s, block: %s', tx.hash('hex'), tx.block);
+    console.debug('Transaction: %j', tx);
+});
+
+pool.on('watched', function(tx) {
+    console.info('Watched transaction: %s, block: %s', tx.hash('hex'), tx.block);
+    console.info('Watched transaction: %j', tx);
     wallet.addTX(tx);
     container.append('<div>Transaction: ' + tx.hash('hex') + ' block: ' + tx.block + '</div>');
-});
+})
 
 pool.on('pool block', function(block) {
     console.debug('Pool block: %s, tx: %j', block.rhash, block.tx);
@@ -100,10 +111,11 @@ pool.on('headers', function(headers, peer) {
     }
 });
 
-var privkey = PRIV_KEY;//'L3NoTeAoXbceE3PLsTKc2W9wifXeaCLuqzFBEH85iK8M5nbmQPcz';
+var privkey = PRIV_KEY;
 
 var wallet = new bcoin.wallet({
-    priv: privkey
+    priv: privkey,
+    storage: walletStorage
 });
 
 pool.once('full', finish);
@@ -134,11 +146,13 @@ pool.startSync();
 var container = null;
 var progress = null;
 
-window.wat = function() { console.info('WAT')};
+window.wat = function() {
+console.info('WAT')
+};
 window.go = function(el, prog) {
-	container = el;
-	progress = prog;
+container = el;
+progress = prog;
 }
 window.balance = function() {
-	container.append('Balance: ' + wallet.balance());
+container.append('Balance: ' + wallet.balance());
 }
