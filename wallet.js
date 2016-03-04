@@ -1,8 +1,5 @@
 var bcoin = require('bcoin');
 var net = require('net-browserify');
-var leveljs = require('level-js');
-var levelup = require('levelup');
-
 
 function addTimestamp(o) {
     if (o.__ts__) {
@@ -33,26 +30,27 @@ return sourceCreateHash(alg);
 };
 
 net.setProxy({
-    hostname: 'bcoin.herokuapp.com',
-    port: 80
+    // hostname: 'bcoin.herokuapp.com',
+    hostname: 'localhost',
+    port: 3000
 });
 
-var chainStorage = levelup('bcoin-chain', {
-    db: leveljs,
-    valueEncoding: 'json'
+var storage = new Dexie('chain-db');
+
+storage.version(1).stores({
+    chain: 'paddedHeight, &hash'
 });
 
-var walletStorage = levelup('bcoin-wallet', {
-    db: leveljs,
-    valueEncoding: 'json'
-});
+storage.open();
 
 var pool = bcoin.pool({
+    debug: true,
     size: 64,
     createSocket: function(port, host) {
         return net.connect(port, host);
     },
-    storage: chainStorage
+    storage: storage,
+    db: ChainDB
 });
 
 
@@ -114,8 +112,7 @@ pool.on('headers', function(headers, peer) {
 var privkey = PRIV_KEY;
 
 var wallet = new bcoin.wallet({
-    priv: privkey,
-    storage: walletStorage
+    priv: privkey
 });
 
 pool.once('full', finish);
@@ -136,6 +133,7 @@ pool.watch(wallet.getHash());
 
 wallet.on('balance', function(balance) {
     // Convert satoshis to BTC.
+    console.log('Balance: ' + balance);
     var btc = bcoin.utils.toBTC(balance);
     console.log('Your wallet balance has been updated: %s', btc);
 });
@@ -156,3 +154,4 @@ progress = prog;
 window.balance = function() {
 container.append('Balance: ' + wallet.balance());
 }
+window.db = storage.chain;

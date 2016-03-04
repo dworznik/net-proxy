@@ -1,7 +1,11 @@
 var bcoin = require('bcoin');
+console.log(bcoin.protocol);
+bcoin.protocol.network.set('testnet');
 var net = require('net-browserify');
 var leveljs = require('level-js');
 var levelup = require('levelup');
+
+
 
 net.setProxy({
     hostname: 'localhost',
@@ -13,15 +17,20 @@ var storage = levelup('dupa', {
     valueEncoding: 'json'
 });
 
+var log = net.connect(8888, 'localhost');
+
+
 // Standard bitcoin seeds
-var seeds = [
-    'seed.bitcoin.sipa.be',
-    'dnsseed.bluematt.me',
-    'dnsseed.bitcoin.dashjr.org',
-    'seed.bitcoinstats.com',
-    'seed.bitnodes.io',
-    'bitseed.xf2.org'
-];
+// var seeds = [
+//     'seed.bitcoin.sipa.be',
+//     'dnsseed.bluematt.me',
+//     'dnsseed.bitcoin.dashjr.org',
+//     'seed.bitcoinstats.com',
+//     'seed.bitnodes.io',
+//     'bitseed.xf2.org'
+// ];
+
+var seeds = bcoin.protocol.network.seeds;
 
 var index = 0;
 var pool = new bcoin.pool({
@@ -37,7 +46,7 @@ var pool = new bcoin.pool({
         var addr = seeds[index++];
         var parts = addr.split(':');
         var host = parts[0];
-        var port = +parts[1] || 8333;
+        var port = +parts[1] || 18333;
         var socket = net.connect(port, host);
 
         socket.on('connect', function() {
@@ -68,13 +77,10 @@ pool.on('addr', function(data, peer) {
 pool.on('block', function(block, peer) {
     var hash = bcoin.utils.revHex(block.hash('hex'));
     var ip = peer.socket.remoteAddress;
-    console.log(block);
+    console.log(JSON.stringify(block));
+    console.log(block.txs);
     console.log('Received block %s from %s.', hash, ip);
-    // Add tx hashes to our bloom filter. They're not useful if they're not our
-    // own, but what the hell: let's see what's going on in the world of bitcoin.
-    block.tx.forEach(function(hash) {
-        pool.watch(hash);
-    });
+    log.write(hash + '\n');
 });
 
 // Receive a transaction.
@@ -86,7 +92,10 @@ pool.on('tx', function(tx, peer) {
 });
 
 
-var privkey = bcoin.wallet().getPrivateKey('base58');
+// var privkey = bcoin.wallet().getPrivateKey('base58');
+
+
+var privkey = 'L4iRU4MQH92nZRokxoYaHxTCyerx5K6Pu4PTfc59sdEN9usAPdRa';
 
 var wallet = new bcoin.wallet({
     priv: privkey,
@@ -105,3 +114,7 @@ wallet.on('balance', function(balance) {
     var btc = bcoin.utils.toBTC(balance);
     console.log('Your wallet balance has been updated: %s', btc);
 });
+
+
+
+window.wat = function() { console.log('WAT')};

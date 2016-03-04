@@ -10,19 +10,31 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "babel": "^6.5.2",
+    "babel-core": "^6.3.26",
+    "babel-loader": "^6.2.2",
     "bcoin": "git://github.com/dworznik/bcoin.git#ve-testing-1",
+    "bitcore-lib": "^0.13.13",
     "cors": "^2.7.1",
+    "dexie": "^1.2.0",
     "express": "^4.13.3",
+    "inline-source-map": "^0.6.1",
+    "json-loader": "^0.5.4",
     "level-js": "^2.2.3",
     "leveldown": "^1.4.3",
     "levelup": "^1.3.1",
     "net-browserify": "^0.2.2",
     "rcl": "^0.3.4",
-    "webpack": "^1.12.12",
-    "babel-core": "^6.3.26",
-    "babel-loader": "^6.2.0",
-    "json-loader": "^0.5.4"
+    "webpack": "^1.12.12"
   },
   "devDependencies": {
+    "jasmine-core": "^2.4.1",
+    "karma": "^0.13.21",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^0.2.2",
+    "karma-jasmine": "^0.3.7",
+    "karma-mocha": "^0.2.1",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-webpack": "^1.7.0"
   }
 }
