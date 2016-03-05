@@ -18,7 +18,7 @@ app.use(function(req, res, next) {
 });
 app.use(cors({
   credentials: true,
-  origin: ['https://localhost:8080', 'http://localhost:8080'],
+  origin: ['https://localhost:8080'],
   methods: ['GET', 'POST', 'PUT', 'CONNECT', 'HEAD', 'OPTIONS']
 }));
 app.use(netApi());
