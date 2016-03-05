@@ -6,25 +6,25 @@ var cors = require('cors');
 var app = express();
 
 app.use(function(req, res, next) {
-    var oldSetHeader = res.setHeader;
-    res.setHeader = function() {
-        if (!res._headerSent) {
-            oldSetHeader.apply(res, arguments);
-        } else {
-        	console.log('Headers already sent.');
-        }
-    };
-    next();
+  var oldSetHeader = res.setHeader;
+  res.setHeader = function() {
+    if (!res._headerSent) {
+      oldSetHeader.apply(res, arguments);
+    } else {
+      console.log('Headers already sent.');
+    }
+  };
+  next();
 });
 app.use(cors({
-    credentials: true,
-    origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'CONNECT', 'HEAD', 'OPTIONS']
+  credentials: true,
+  origin: ['https://localhost:8080', 'http://localhost:8080'],
+  methods: ['GET', 'POST', 'PUT', 'CONNECT', 'HEAD', 'OPTIONS']
 }));
 app.use(netApi());
 
 
 // Start the server 
 var server = app.listen(3000, function() {
-    console.log('Server listening on port ' + server.address().port);
+  console.log('Server listening on port ' + server.address().port);
 });
