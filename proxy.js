@@ -18,7 +18,7 @@ app.use(function(req, res, next) {
 });
 app.use(cors({
   credentials: true,
-  origin: 'https://localhost:8080',
+  origin: ['http://localhost:8080', 'https://localhost:8080', 'https://ve-wallet-pr-226.herokuapp.com'],
   methods: ['GET', 'POST', 'PUT', 'CONNECT', 'HEAD', 'OPTIONS']
 }));
 app.use(netApi());
